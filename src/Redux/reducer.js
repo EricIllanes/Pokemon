@@ -1,6 +1,4 @@
-import {GET_POKEMON} from "./actions"
-// import { ASC, DESC, ASCSTR, DESCSTR } from "../../components/orderPokemon/orderPokemon"
-// import { sobrecinc, undercinc, api, created, All } from "../../components/filterPokemon/filterPokemon"
+import {GET_POKEMON,SEARCH_POKEMON} from "./actions"
 const initialState = {
     getpokemons: [],
     pokemons: [],
@@ -23,7 +21,12 @@ export default function rootReducer(state = initialState, action) {
                 filteredOrigen: action.payload
             }
 
-
+        case SEARCH_POKEMON:
+            return {
+                ...state,
+                pokemons: action.payload
+            }
+            
         default:
             return state
     }

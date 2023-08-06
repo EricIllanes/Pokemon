@@ -12,7 +12,7 @@ export const IS_FILTERED = "IS_FILTERED"
 export const DETAIL_CLEAN = "DET>AIL_CLEAN"
 export const CLEAN = "CLEAN"
 
-
+  
 export const getPokemon = () => async (dispatch) => {
     try {
       const randomNumbers = [];
@@ -21,7 +21,7 @@ export const getPokemon = () => async (dispatch) => {
         return Math.floor(Math.random() * (max - min)) + min;
       };
       for (let i = 0; i < 10; i++) {
-        randomNumbers.push(genNum(1, 1000));
+        randomNumbers.push(genNum(0, 500));
       }
       for (let x = 0; x < randomNumbers.length; x++) {
         let pokeCall = await axios.get(
@@ -47,18 +47,27 @@ export const getPokemon = () => async (dispatch) => {
     }
   };
   
-
-export function getRandom() {
-    return function (dispatch) {
-        axios.get(``)
-        
-            .then((pokerandom) => {
-                dispatch({
-                    type: RANDOM_POKEMON,
-                    payload: pokerandom.data
-                })
-            }).catch((error) => {
-                console.log(error)
-            })
+  export const searchPokemon = (name) => async (dispatch)=>{
+    try {
+      const findedPokemon = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`)
+      if(findedPokemon){
+        let pokemon = [{
+          id: findedPokemon.data.id,
+          name:
+          findedPokemon.data.forms[0].name.charAt(0).toUpperCase() +
+          findedPokemon.data.forms[0].name.slice(1),
+          image: findedPokemon.data.sprites.other.home.front_default,
+          strength: findedPokemon.data.stats[1].base_stat,
+          types: findedPokemon.data.types.map((e) => e.type.name),
+        }]
+        console.log({pokemon})
+        dispatch({
+          type: SEARCH_POKEMON,
+          payload: pokemon
+        })
+      }
+    } catch (error) {
+      console.log(error.message)
+      return null;
     }
-}
+  }
