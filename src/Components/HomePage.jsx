@@ -11,27 +11,7 @@ import { OrderPokemon } from "./orderPage";
 import NotFound from "../assets/NotFound.png";
 import { Link } from "react-router-dom";
 import { Metronome } from "@uiball/loaders";
-
-const colors = {
-  fighting: "#c03028",
-  normal: "#a8a878",
-  flying: "#a890f0",
-  poison: "#a040a0",
-  ground: "#e0c068",
-  rock: "#b8a038",
-  bug: "#a8b820",
-  ghost: "#705898",
-  steel: "#b8b8d0",
-  fire: "#ee8328",
-  water: "#6890f0",
-  electric: "#f8d030",
-  psychic: "#f85888",
-  ice: "#98d8d8",
-  dragon: "#7038f8",
-  dark: "#705848",
-  grass: "#78c850",
-  fairy: "#ffb7fa",
-};
+import {colors} from "../assets/constants"
 
 export default function HomePage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -149,24 +129,32 @@ export default function HomePage() {
                   alt=""
                 />
                 <Link to={`/detailpokemon/${pokemons.id}`}>
-                  <p
-                    className={`text-center mt-2 text-3xl font-medium relative`}
+                  <h1
+                    className={`text-2xl text-sky-600 font-bold italic text-center`}
+                    // style={{
+                    //   color: `${colors[pokemons.types[0]]}`,
+                    //   WebkitTextStroke: "1px black",
+                    // }}
                   >
                     {pokemons.name}
-                  </p>
+                  </h1>
                 </Link>
 
                 <div className="w-full flex flex-row justify-center items-center">
                   <Pokeball />
-                  <div className="text-center font-light mx-4 text-xl self-center items-center justify-center h-full flex items-center">
-                    {pokemons.id}
+                  <div className="text-center font-light mx-4 text-bold text-xl self-center items-center justify-center h-full flex items-center">
+                    #{pokemons.id}
                   </div>
                 </div>
                 <div className="px-6 text-center mt-2 font-light text-sm flex flex-row justify-center items-center">
                   {pokemons.types.map((types, index) => (
                     <p
                       key={index}
-                      className="mx-2 text-center font-normal text-lg"
+                      className="mx-2 font-bold italic text-center text-xl"
+                      style={{
+                        color: `${colors[types]}`,
+                        WebkitTextStroke: `0.5px black`,
+                      }}
                     >
                       {types.charAt(0).toUpperCase() + types.slice(1) ||
                         "No hay tipos asociados"}
