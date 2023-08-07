@@ -1,8 +1,10 @@
-# React + Vite
+# Project Pokemon
+This project try to get a new look and vision to a old Pokemon project i have, implementing just a web SPA consuming data from pokApi, and doing al the styles with TailwindCSS.
+I hope you enjoy the result! 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### For run project
+ - Clone this repository
+ - npm install
+ - npm run dev
+ - Have fun!
