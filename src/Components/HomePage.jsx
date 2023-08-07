@@ -1,10 +1,15 @@
 import { useEffect } from "react";
-import { getPokemon } from "../Redux/actions";
+import { cleanPokemon, getPokemon } from "../Redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import SearchBar from "./SearchBar";
 import Pokemon from "../assets/Pokemon.png";
-import { Pokeball } from "../assets/Icons.jsx";
+import { HeartIcon, KilogramIcon, Pokeball } from "../assets/Icons.jsx";
+import { FilterPokemon } from "./filterPage";
+import Logo from "../assets/Logo.png"
+import { OrderPokemon } from "./orderPage";
+import NotFound from '../assets/NotFound.png'
+import { Link } from "react-router-dom";
 
 const colors = {
   fighting: "#c03028",
@@ -26,53 +31,68 @@ const colors = {
   grass: "#78c850",
   fairy: "#ffb7fa",
 };
+
 export default function HomePage() {
   const [isLoading, setIsLoading] = useState(false);
   const { pokemons } = useSelector((state) => state);
   const dispatch = useDispatch();
+
   useEffect(() => {
+    dispatch(cleanPokemon())
     dispatch(getPokemon());
   }, []);
-  console.log(pokemons);
+
   useEffect(() => {
-    pokemons.length > 0 ? setIsLoading(false) : setIsLoading(true);
+   pokemons!== null && pokemons.length > 0 ? setIsLoading(false) : setIsLoading(true);
   }, [pokemons]);
 
   return (
     <div className="flex bg-homebackground bg-cover h-screen w-full items-center justify-center">
-      <div className=" flex flex-column justify-center w-[350px] h-[90%] bg-white bg-opacity-20 backdrop-filter backdrop-blur-8xl mx-4 rounded-lg">
-        <div>
+      <div className="flex h-screen flex-col items-center justify-around">
+        <button onClick={()=>window.location.reload()}>
+        <img className="" src={Logo}/>
+        </button>
+
+      <div className=" flex flex-col w-[300px] h-3/4 bg-white bg-opacity-20 backdrop-filter backdrop-blur-8xl mx-4 rounded-lg">
+        <div className="mt-2">
           <SearchBar />
         </div>
+        <div className="mt-2">
+          <FilterPokemon />
+        </div>
+        <div className="mt-2">
+          <OrderPokemon />
+        </div>
       </div>
-      {pokemons.length === 0 && isLoading ? (
+
+
+
+      </div>
+
+      { pokemons !== null && pokemons.length === 0 && isLoading ? (
         <div className=" bg-yellow-200 w-full h-screen flex items-center justify-center">
           Loading...
         </div>
       ) : (
-        <div className="h-screen w-full grid grid-cols-5 m-auto justify-center item-center place-items-center justify-items-center">
-          {pokemons.map((pokemons, index) => {
-            console.log("Colorsh", pokemons.length, pokemons.types[0]);
+        <div className="h-screen w-full flex flex-wrap  m-auto justify-center item-center place-items-center justify-items-center">
+          {pokemons?.map((pokemons, index) => {
             return (
               <div
                 key={index}
-                className="w-[250px] h-[260px] bg-white bg-opacity-20 backdrop-filter backdrop-blur-8xl border-r-2 border-b-2 border-l-2 shadow-xl hover:shadow mx-[20px] my-[90px]"
+                className="w-[250px] h-[280px] bg-white bg-opacity-20 backdrop-filter backdrop-blur-8xl border-r-2 border-b-2 border-l-2 shadow-xl hover:shadow mx-[20px] my-[90px]"
               >
                 <img
-                  className={`bg-${pokemons.types[0]} w-52 mx-auto rounded-full -mt-20 border-8`}
+                  className={`bg-${pokemons.types[0]} w-48 mx-auto rounded-full -mt-20 border-8`}
                   style={{ backgroundColor: colors[pokemons.types[0]] }}
                   src={pokemons.image || Pokemon}
                   alt=""
                 />
+                <Link to={`/detailpokemon/${pokemons.id}`}>
                 <p className={`text-center mt-2 text-3xl font-medium relative`}>
                   {pokemons.name}
-                  <span
-                    className={`absolute inset-0 bg-gradient-to-r bg-clip-text from-${
-                      colors[pokemons.types[0]]
-                    } to-blue-400`}
-                    aria-hidden="true"
-                  ></span>
                 </p>
+                </Link>
+
 
                 <div className="w-full flex flex-row justify-center items-center">
                   <Pokeball />
@@ -91,11 +111,37 @@ export default function HomePage() {
                     </p>
                   ))}
                 </div>
+                <div className="flex w-full flex-row items-center justify-between">
+                  <div className="flex flex-row  items-center mx-2"> 
+                    <HeartIcon />
+                    <span>
+                    {pokemons.life}
+                  </span>
+                  </div>
+               
+                  <div className="flex flex-row items-center mx-2"> 
+                    <KilogramIcon />
+                    <span>
+                    {pokemons.weight/100}
+                  </span>
+                  </div>
+
+                </div>
               </div>
             );
           })}
         </div>
       )}
+
+      {pokemons === null ? 
+      <div className="flex w-full h-screen flex-col items-center justify-center item-center place-items-center justify-items-center">
+        <img src={NotFound} />
+        <h1  className="text-center mt-2 text-3xl font-medium relative" style={{color:"yellow", WebkitTextStroke: "1px black"}}>Ooops! A wild Snorlax has blocked our path,</h1>
+        <h1 className="text-center mt-2 text-3xl font-medium relative" style={{color:"yellow", WebkitTextStroke: "1px black"}}>we cant find your Pokémon, try with other name!</h1>
+      </div>
+      :
+      <></>
+      }
     </div>
   );
 }

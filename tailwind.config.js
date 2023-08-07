@@ -1,5 +1,4 @@
-/** @type {import('tailwindcss').Config} */
-export default {
+module.exports= {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
@@ -35,7 +34,4 @@ export default {
     },
   },
   plugins: [],
-  safelist: [
-    /bg-(fighting|normal|flying|poison|ground|rock|bug|ghost|steel|fire|water|electric|psychic|ice|dragon|dark|grass|fairy)/,
-  ],
 };

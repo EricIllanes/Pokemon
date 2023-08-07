@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { searchPokemon } from "../Redux/actions";
+import { cleanPokemon, searchPokemon } from "../Redux/actions";
 import { SearchIcon } from "../assets/Icons";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function SearchBar() {
   const dispatch = useDispatch();
@@ -16,10 +17,10 @@ export default function SearchBar() {
 
   function onClickSearch(event) {
     event.preventDefault();
-    console.log(search.toLowerCase());
     if (!search) {
-      alert("Debes ingresar un nombre");
+      toast.error("Have to write a name to search");
     } else {
+      dispatch(cleanPokemon())
       dispatch(searchPokemon(search.toLocaleLowerCase()));
       setSearch("");
     }
@@ -29,6 +30,7 @@ export default function SearchBar() {
       onSubmit={(event) => onClickSearch(event)}
       className="w-full flex flex-row justify-center items-center"
     >
+      <Toaster />
       <input
         placeholder="Search"
         className="flex w-3/4 rounded-md border border-gray-300 focus:border-blue-200 focus:outline-none focus:ring-1 focus:ring-blue-700 py-1 px-1.5 text-gray-500"
@@ -37,8 +39,11 @@ export default function SearchBar() {
         value={search}
       />
 
-<button type="submit" className="p-2.5 ml-2 text-sm font-medium text-white bg-blue-00 rounded-lg border hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-          <SearchIcon />
+      <button
+        type="submit"
+        className="p-2.5 ml-2 text-sm font-medium text-white bg-blue-00 rounded-lg border hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      >
+        <SearchIcon />
       </button>
     </form>
   );
