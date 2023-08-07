@@ -57,15 +57,14 @@ export default function rootReducer(state = initialState, action) {
     }
 
     case ORDER_POKEMON: {
-        console.log('lo que llega es:', action.payload)
       let orderPokemon = state.pokemons;
       if (action.payload === "ascweight" || action.payload === "descweight"){
         orderPokemon = orderPokemon.sort((a, b) => {
             if (a.weight < b.weight) {
-              return action.payload === "ascweight" ? -1 : 1;
+              return action.payload === "ascweight" ? 1 : -1;
             }
             if (a.weight > b.weight) {
-              return action.payload === "ascweight" ? 1 : -1;
+              return action.payload === "ascweight" ? -1 : 1;
             }
             return 0;
           });
@@ -73,10 +72,10 @@ export default function rootReducer(state = initialState, action) {
       } else if(action.payload === "asclife" || action.payload=== "desclife"){
         orderPokemon = orderPokemon.sort((a, b) => {
             if (a.life < b.life) {
-              return action.payload === "asclife" ? -1 : 1;
+              return action.payload === "asclife" ? 1 : -1;
             }
             if (a.life > b.life) {
-              return action.payload === "asclife" ? 1 : -1;
+              return action.payload === "asclife" ? -1 : 1;
             }
             return 0;
           });
@@ -91,7 +90,6 @@ export default function rootReducer(state = initialState, action) {
           return 0;
         });
       }
-      console.log(state.pokemons.map((elements)=> elements.weight))
         return {
           ...state,
           pokemons: orderPokemon,

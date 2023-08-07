@@ -77,7 +77,6 @@ export const searchPokemon = (identifier) => async (dispatch) => {
           weight: findedPokemon.data.weight,
         },
       ];
-      console.log(pokemon[0].text)
       dispatch({
         type: SEARCH_POKEMON,
         payload: pokemon,

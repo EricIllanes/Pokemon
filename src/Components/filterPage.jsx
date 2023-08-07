@@ -7,9 +7,7 @@ export function FilterPokemon() {
   const dispatch = useDispatch();
 
   const onSelect =(event) =>{
-    console.log(event)
     event.preventDefault()
-    console.log(event.target.value)
     dispatch(filterPokemon(event.target.value))
   }
 

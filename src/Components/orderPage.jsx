@@ -7,7 +7,6 @@ export function OrderPokemon() {
 
   const onSelect = (event)=>{
     event.preventDefault()
-    console.log(event.target.value)
     dispatch(orderedPokemon(event.target.value))
   }
 

@@ -6,10 +6,11 @@ import SearchBar from "./SearchBar";
 import Pokemon from "../assets/Pokemon.png";
 import { HeartIcon, KilogramIcon, Pokeball } from "../assets/Icons.jsx";
 import { FilterPokemon } from "./filterPage";
-import Logo from "../assets/Logo.png"
+import Logo from "../assets/Logo.png";
 import { OrderPokemon } from "./orderPage";
-import NotFound from '../assets/NotFound.png'
+import NotFound from "../assets/NotFound.png";
 import { Link } from "react-router-dom";
+import { Metronome } from "@uiball/loaders";
 
 const colors = {
   fighting: "#c03028",
@@ -38,40 +39,100 @@ export default function HomePage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(cleanPokemon())
+    dispatch(cleanPokemon());
     dispatch(getPokemon());
   }, []);
 
   useEffect(() => {
-   pokemons!== null && pokemons.length > 0 ? setIsLoading(false) : setIsLoading(true);
+    pokemons !== null && pokemons.length > 0
+      ? setIsLoading(false)
+      : setIsLoading(true);
   }, [pokemons]);
 
-  return (
+  if (pokemons === null) {
+    return (
+      <div className="flex bg-homebackground bg-cover h-screen w-full items-center justify-center">
+        <div className="flex h-screen flex-col items-center justify-around">
+          <button onClick={() => window.location.reload()}>
+            <img className="" src={Logo} />
+          </button>
+          <div className=" flex flex-col w-[300px] h-3/4 bg-white bg-opacity-20 backdrop-filter backdrop-blur-8xl mx-4 rounded-lg">
+            <div className="mt-2">
+              <SearchBar />
+            </div>
+            <div className="mt-2">
+              <FilterPokemon />
+            </div>
+            <div className="mt-2">
+              <OrderPokemon />
+            </div>
+            <div className="flex mt-12 items-center justify-center w-full">
+              <button
+                onClick={() => window.location.reload()}
+                className="group relative self-center h-12 w-48 overflow-hidden rounded-lg bg-white text-lg shadow"
+              >
+                <div className="absolute inset-0 w-3 bg-sky-600 transition-all duration-[250ms] ease-out group-hover:w-full"></div>
+                <span className="relative text-black group-hover:text-white">
+                  Refresh
+                </span>
+              </button>
+            </div>
+          </div>
+          /
+        </div>
+        <div className="flex flex-col w-full h-screen justify-center items-center">
+          <img src={NotFound} />
+          <h1
+            className="text-center mt-2 text-3xl font-medium relative"
+            style={{ color: "yellow", WebkitTextStroke: "1px black" }}
+          >
+            Ooops! A wild Snorlax has blocked our path,
+          </h1>
+          <h1
+            className="text-center mt-2 text-3xl font-medium relative"
+            style={{ color: "yellow", WebkitTextStroke: "1px black" }}
+          >
+            we cant find your Pokémon, try with other name!
+          </h1>
+        </div>
+      </div>
+    );
+  }
+
+  if (pokemons !== null) {
+    return (
     <div className="flex bg-homebackground bg-cover h-screen w-full items-center justify-center">
       <div className="flex h-screen flex-col items-center justify-around">
-        <button onClick={()=>window.location.reload()}>
-        <img className="" src={Logo}/>
+        <button onClick={() => window.location.reload()}>
+          <img className="" src={Logo} />
         </button>
-
-      <div className=" flex flex-col w-[300px] h-3/4 bg-white bg-opacity-20 backdrop-filter backdrop-blur-8xl mx-4 rounded-lg">
-        <div className="mt-2">
-          <SearchBar />
+        <div className=" flex flex-col w-[300px] h-3/4 bg-white bg-opacity-20 backdrop-filter backdrop-blur-8xl mx-4 rounded-lg">
+          <div className="mt-2">
+            <SearchBar />
+          </div>
+          <div className="mt-2">
+            <FilterPokemon />
+          </div>
+          <div className="mt-2">
+            <OrderPokemon />
+          </div>
+          <div className="flex mt-12 items-center justify-center w-full">
+            <button
+              onClick={() => window.location.reload()}
+              className="group relative self-center h-12 w-48 overflow-hidden rounded-lg bg-white text-lg shadow"
+            >
+              <div className="absolute inset-0 w-3 bg-sky-600 transition-all duration-[250ms] ease-out group-hover:w-full"></div>
+              <span className="relative text-black group-hover:text-white">
+                Refresh
+              </span>
+            </button>
+          </div>
         </div>
-        <div className="mt-2">
-          <FilterPokemon />
-        </div>
-        <div className="mt-2">
-          <OrderPokemon />
-        </div>
+        /
       </div>
-
-
-
-      </div>
-
-      { pokemons !== null && pokemons.length === 0 && isLoading ? (
-        <div className=" bg-yellow-200 w-full h-screen flex items-center justify-center">
-          Loading...
+      {pokemons !== null && pokemons.length === 0 && isLoading ? (
+        <div className="w-full h-screen flex items-center justify-center">
+          <Metronome size={80} speed={1.6} color="Yellow" />
         </div>
       ) : (
         <div className="h-screen w-full flex flex-wrap  m-auto justify-center item-center place-items-center justify-items-center">
@@ -88,11 +149,12 @@ export default function HomePage() {
                   alt=""
                 />
                 <Link to={`/detailpokemon/${pokemons.id}`}>
-                <p className={`text-center mt-2 text-3xl font-medium relative`}>
-                  {pokemons.name}
-                </p>
+                  <p
+                    className={`text-center mt-2 text-3xl font-medium relative`}
+                  >
+                    {pokemons.name}
+                  </p>
                 </Link>
-
 
                 <div className="w-full flex flex-row justify-center items-center">
                   <Pokeball />
@@ -112,36 +174,131 @@ export default function HomePage() {
                   ))}
                 </div>
                 <div className="flex w-full flex-row items-center justify-between">
-                  <div className="flex flex-row  items-center mx-2"> 
+                  <div className="flex flex-row  items-center mx-2">
                     <HeartIcon />
-                    <span>
-                    {pokemons.life}
-                  </span>
-                  </div>
-               
-                  <div className="flex flex-row items-center mx-2"> 
-                    <KilogramIcon />
-                    <span>
-                    {pokemons.weight/100}
-                  </span>
+                    <span>{pokemons.life}</span>
                   </div>
 
+                  <div className="flex flex-row items-center mx-2">
+                    <KilogramIcon />
+                    <span>{pokemons.weight / 10}</span>
+                  </div>
                 </div>
               </div>
             );
           })}
         </div>
       )}
-
-      {pokemons === null ? 
-      <div className="flex w-full h-screen flex-col items-center justify-center item-center place-items-center justify-items-center">
-        <img src={NotFound} />
-        <h1  className="text-center mt-2 text-3xl font-medium relative" style={{color:"yellow", WebkitTextStroke: "1px black"}}>Ooops! A wild Snorlax has blocked our path,</h1>
-        <h1 className="text-center mt-2 text-3xl font-medium relative" style={{color:"yellow", WebkitTextStroke: "1px black"}}>we cant find your Pokémon, try with other name!</h1>
-      </div>
-      :
-      <></>
-      }
     </div>
-  );
+    )
 }
+}
+
+  //   <div className="flex bg-homebackground bg-cover h-screen w-full items-center justify-center">
+  //     <div className="flex h-screen flex-col items-center justify-around">
+  //       <button onClick={() => window.location.reload()}>
+  //         <img className="" src={Logo} />
+  //       </button>
+  //       <div className=" flex flex-col w-[300px] h-3/4 bg-white bg-opacity-20 backdrop-filter backdrop-blur-8xl mx-4 rounded-lg">
+  //         <div className="mt-2">
+  //           <SearchBar />
+  //         </div>
+  //         <div className="mt-2">
+  //           <FilterPokemon />
+  //         </div>
+  //         <div className="mt-2">
+  //           <OrderPokemon />
+  //         </div>
+  //         <div className="flex mt-12 items-center justify-center w-full">
+  //           <button
+  //             onClick={() => window.location.reload()}
+  //             className="group relative self-center h-12 w-48 overflow-hidden rounded-lg bg-white text-lg shadow"
+  //           >
+  //             <div className="absolute inset-0 w-3 bg-sky-600 transition-all duration-[250ms] ease-out group-hover:w-full"></div>
+  //             <span className="relative text-black group-hover:text-white">
+  //               Refresh
+  //             </span>
+  //           </button>
+  //         </div>
+  //       </div>
+  //       /
+  //     </div>
+  //     {pokemons === null && (
+  //       <div className="flex flex-col w-full h-screen justify-center items-center">
+  //         <img src={NotFound} />
+  //         <h1
+  //           className="text-center mt-2 text-3xl font-medium relative"
+  //           style={{ color: "yellow", WebkitTextStroke: "1px black" }}
+  //         >
+  //           Ooops! A wild Snorlax has blocked our path,
+  //         </h1>
+  //         <h1
+  //           className="text-center mt-2 text-3xl font-medium relative"
+  //           style={{ color: "yellow", WebkitTextStroke: "1px black" }}
+  //         >
+  //           we cant find your Pokémon, try with other name!
+  //         </h1>
+  //       </div>
+  //     )}
+
+  //     {pokemons !== null && pokemons.length === 0 && isLoading ? (
+  //       <div className="w-full h-screen flex items-center justify-center">
+  //         <Metronome size={80} speed={1.6} color="Yellow" />
+  //       </div>
+  //     ) : (
+  //       <div className="h-screen w-full flex flex-wrap  m-auto justify-center item-center place-items-center justify-items-center">
+  //         {pokemons?.map((pokemons, index) => {
+  //           return (
+  //             <div
+  //               key={index}
+  //               className="w-[250px] h-[280px] bg-white bg-opacity-20 backdrop-filter backdrop-blur-8xl border-r-2 border-b-2 border-l-2 shadow-xl hover:shadow mx-[20px] my-[90px]"
+  //             >
+  //               <img
+  //                 className={`bg-${pokemons.types[0]} w-48 mx-auto rounded-full -mt-20 border-8`}
+  //                 style={{ backgroundColor: colors[pokemons.types[0]] }}
+  //                 src={pokemons.image || Pokemon}
+  //                 alt=""
+  //               />
+  //               <Link to={`/detailpokemon/${pokemons.id}`}>
+  //                 <p
+  //                   className={`text-center mt-2 text-3xl font-medium relative`}
+  //                 >
+  //                   {pokemons.name}
+  //                 </p>
+  //               </Link>
+
+  //               <div className="w-full flex flex-row justify-center items-center">
+  //                 <Pokeball />
+  //                 <div className="text-center font-light mx-4 text-xl self-center items-center justify-center h-full flex items-center">
+  //                   {pokemons.id}
+  //                 </div>
+  //               </div>
+  //               <div className="px-6 text-center mt-2 font-light text-sm flex flex-row justify-center items-center">
+  //                 {pokemons.types.map((types, index) => (
+  //                   <p
+  //                     key={index}
+  //                     className="mx-2 text-center font-normal text-lg"
+  //                   >
+  //                     {types.charAt(0).toUpperCase() + types.slice(1) ||
+  //                       "No hay tipos asociados"}
+  //                   </p>
+  //                 ))}
+  //               </div>
+  //               <div className="flex w-full flex-row items-center justify-between">
+  //                 <div className="flex flex-row  items-center mx-2">
+  //                   <HeartIcon />
+  //                   <span>{pokemons.life}</span>
+  //                 </div>
+
+  //                 <div className="flex flex-row items-center mx-2">
+  //                   <KilogramIcon />
+  //                   <span>{pokemons.weight / 100}</span>
+  //                 </div>
+  //               </div>
+  //             </div>
+  //           );
+  //         })}
+  //       </div>
+  //     )}
+  //   </div>
+  // );
